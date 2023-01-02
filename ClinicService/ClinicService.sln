@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicServiceV2", "ClinicSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplicationTest", "WebApplicationTest\WebApplicationTest.csproj", "{55B173B0-3742-4E24-9E99-DC3CA20B69B2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtSample", "JwtSample\JwtSample.csproj", "{7B92D3DC-BB68-419D-8A2F-A91BD79F736E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountSample", "AccountSample\AccountSample.csproj", "{3D32D498-9253-4F9C-B176-331AFC924190}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{55B173B0-3742-4E24-9E99-DC3CA20B69B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55B173B0-3742-4E24-9E99-DC3CA20B69B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55B173B0-3742-4E24-9E99-DC3CA20B69B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B92D3DC-BB68-419D-8A2F-A91BD79F736E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B92D3DC-BB68-419D-8A2F-A91BD79F736E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B92D3DC-BB68-419D-8A2F-A91BD79F736E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B92D3DC-BB68-419D-8A2F-A91BD79F736E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D32D498-9253-4F9C-B176-331AFC924190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D32D498-9253-4F9C-B176-331AFC924190}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D32D498-9253-4F9C-B176-331AFC924190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D32D498-9253-4F9C-B176-331AFC924190}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

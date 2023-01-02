@@ -1,4 +1,5 @@
 ﻿using ClinicServiceNamespace;
+using Grpc.Core;
 using Grpc.Net.Client;
 using static ClinicServiceNamespace.ClinicService;
 
@@ -8,44 +9,57 @@ namespace ClinicClient
     {
         static void Main(string[] args)
         {
-            AppContext.SetSwitch(
-                "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            //AppContext.SetSwitch(
+             //   "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
             using var channel = GrpcChannel.ForAddress("http://localhost:5001");
-            ClinicServiceClient clinicServiceClient = new ClinicServiceClient(channel);
-
-            var createClientResponse = clinicServiceClient.CreateClinet(new CreateClientRequest
+            AuthenticateServiceClient authenticateServiceClient = new AuthenticateServiceClient(channel);
+            
+            var authenticationResponse = authenticateServiceClient.Login(new AuthenticationRequest
             {
-                Document = "DOC34 445",
+                UserName = "sample@gmail.com",
+                Password = "12345"
+            });
+            if (authenticationResponse.Status != 0)
+            {
+                Console.WriteLine("Authentication error.");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine($"Session token: {authenticationResponse.SessionContext.SessionToken}");
+
+            var callCredentials = CallCredentials.FromInterceptor((c, m) =>
+            {
+                m.Add("Authorization",
+                    $"Bearer {authenticationResponse.SessionContext.SessionToken}");
+                return Task.CompletedTask;
+            });
+
+            var protectedChannel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
+            {
+                Credentials = ChannelCredentials.Create(new SslCredentials(), callCredentials)
+            });
+
+            ClinicClientServiceClient client = new ClinicClientServiceClient(protectedChannel);
+
+            var createClientResponse = client.CreateClient(new ClinicServiceProtos.CreateClientRequest
+            {
+                Document = "PASS123",
                 FirstName = "Александр",
                 Patronymic = "Юрьевич",
                 Surname = "Бреус"
             });
 
-            if (createClientResponse.ErrCode == 0)
-            {
-                Console.WriteLine($"Client #{createClientResponse.ClientId} created successfully.");
-            }
-            else
-            {
-                Console.WriteLine($"Create client error.\nErrorCode: {createClientResponse.ErrCode}\nErrorMessage: {createClientResponse.ErrMessage}");
-            }
+            Console.WriteLine($"Client ({createClientResponse.ClientId}) created successfully.");
 
-            var getClientResponse = clinicServiceClient.GetClients(new GetClientsRequest());
+            var getClientsResponse = client.GetClients(new ClinicServiceProtos.GetClientsRequest());
 
-            if (createClientResponse.ErrCode == 0)
+            Console.WriteLine("Clients:");
+            Console.WriteLine("========\n");
+            foreach (var clientObj in getClientsResponse.Clients)
             {
-                Console.WriteLine("Clients");
-                Console.WriteLine("=======\n");
-
-                foreach (var client in getClientResponse.Clients)
-                {
-                    Console.WriteLine($"#{client.ClientId} {client.Document} {client.Surname} {client.FirstName} {client.Patronymic}");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Get clients error.\nErrorCode: {getClientResponse.ErrCode}\nErrorMessage: {getClientResponse.ErrMessage}");
+                Console.WriteLine($"{clientObj.Document} >> {clientObj.Surname} {clientObj.FirstName}");
             }
 
             Console.ReadKey();

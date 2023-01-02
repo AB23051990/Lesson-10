@@ -12,7 +12,7 @@ namespace ClinicService.Data
     public class Pet
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int PetId { get; set; }
 
         [ForeignKey(nameof(Client))]
         public int ClientId { get; set; }
@@ -24,9 +24,10 @@ namespace ClinicService.Data
         [Column]
         public DateTime Birthday { get; set; }
 
-        public Client Client { get; set; }
+        public virtual Client Client { get; set; }
 
         [InverseProperty(nameof(Consultation.Pet))]
-        public ICollection<Consultation> Consultations { get; set; } = new HashSet<Consultation>();
+        public virtual ICollection<Consultation> Consultations { get; set; } = new HashSet<Consultation>();
+
     }
 }

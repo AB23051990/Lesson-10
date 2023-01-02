@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,7 +13,7 @@ namespace ClinicService.Data
     public class Consultation
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int ConsultationId { get; set; }
 
         [ForeignKey(nameof(Client))]
         public int ClientId { get; set; }
@@ -26,9 +27,8 @@ namespace ClinicService.Data
         [Column]
         public string Description { get; set; }
 
+        public virtual Client Client { get; set; }
 
-        public  Client Client { get; set; }
-
-        public  Pet Pet { get; set; }
+        public virtual Pet Pet { get; set; }
     }
 }
